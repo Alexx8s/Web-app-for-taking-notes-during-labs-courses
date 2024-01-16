@@ -5,7 +5,7 @@ env.config();
 
 const db = new Sequelize({
     dialect: "mysql",
-    database: "WEBAPP",
+    database: "webapp",
     username: "root",
     password: "1234",  
     logging: false,

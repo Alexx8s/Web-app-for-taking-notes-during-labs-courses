@@ -1,6 +1,7 @@
 import express from 'express';
 import {getNotes,
         getNoteById,
+        editNote,
         deleteNote,
         createNote,
         updateNote,

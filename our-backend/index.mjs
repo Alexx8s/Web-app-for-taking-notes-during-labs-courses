@@ -27,6 +27,6 @@ app.use("/api", tagRouter);
 app.use("/api", noteRouter);
 app.use("/api",gradeRouter);
 
-let port = process.env.PORT || 8001;
+let port = process.env.PORT || 8003;
 app.listen(port);
 console.log('API is runnning at ' + port);

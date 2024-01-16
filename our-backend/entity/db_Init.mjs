@@ -8,13 +8,14 @@ import Note from './Note.mjs';
 
 env.config();
 
+
 async function Create_DB() {
     let conn;
 
     try {
         const connection = await mysql.createConnection({
             user: "root",
-            password: "1234",
+            password: "",
         });
 
         conn = connection;
