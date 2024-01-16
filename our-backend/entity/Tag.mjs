@@ -1,4 +1,4 @@
-import db from '../dbConfig.js';
+import db from '../dbConfiguration.mjs';
 import Sequelize from 'sequelize';
 
 const Tag = db.define('Tag', {

@@ -1,5 +1,5 @@
 // Import necessary modules and dependencies
-import db from '../dbConfig.js';
+import db from '../dbConfiguration.mjs';
 import Sequelize from 'sequelize';
 
 // Define the "NoteTags" model

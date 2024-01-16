@@ -1,30 +1,29 @@
-// Import necessary modules and dependencies
-import db from '../dbConfig.js';
+import db from '../dbConfiguration.mjs';
 import Sequelize from 'sequelize';
 
-const Note = db.define('Note', {
-  NoteID: {
+const Grade = db.define('Grade', {
+  GradeID: {
     type: Sequelize.INTEGER,
     primaryKey: true,
     autoIncrement: true,
     allowNull: false,
   },
-  Title: {
+  GradeValue: {
     type: Sequelize.STRING(255),
     allowNull: false,
   },
-  Content: {
+  Comments: {
     type: Sequelize.TEXT,
   },
-  SubjectID: {
+  CourseID: {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
-  UserID: {
+  StudentID: {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
 });
 
-// Export the Note model
-export default Note;
+
+export default Grade;

@@ -1,12 +1,14 @@
 import express from 'express';
 import env from 'dotenv';
 import cors from 'cors';
-import DB_Init from './entity/DBinit.js';
-import createDbRouter from './route/createDbRoute.js';
-import userRouter from './route/UserRouter.js';
-import subjectRouter from './route/SubjectRouter.js';
-import tagRouter from './route/TagRouter.js';
-import noteRouter from './route/NoteRouter.js';
+import DB_Init from './entity/db_Init.mjs';
+import createDbRouter from './routes/createDBRoute.mjs';
+import StudentRouter from './routes/StudentRouter.mjs';
+import courseRouter from './routes/CourseRouter.mjs';
+import tagRouter from './routes/TagRouter.mjs';
+import noteRouter from './routes/NoteRouter.mjs';
+import studentRouter from './routes/StudentRouter.mjs';
+import gradeRouter from './routes/GradeRouter.mjs';
 env.config();
 
 let app = express();
@@ -19,10 +21,11 @@ app.use(express.urlencoded({
 DB_Init();
 
 app.use("/api", createDbRouter)
-app.use("/api", userRouter);
-app.use("/api", subjectRouter);
+app.use("/api", studentRouter);
+app.use("/api", courseRouter);
 app.use("/api", tagRouter);
 app.use("/api", noteRouter);
+app.use("/api",gradeRouter);
 
 let port = process.env.PORT || 8001;
 app.listen(port);

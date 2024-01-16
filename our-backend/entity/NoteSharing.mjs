@@ -1,4 +1,4 @@
-import db from '../dbConfig.js';
+import db from '../dbConfiguration.mjs';
 import Sequelize from 'sequelize';
 import Note from './Notes.mjs';
 import Student from './Students.mjs';

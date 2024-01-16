@@ -1,22 +1,15 @@
-import db from '../dbConfig.js';
+import db from '../dbConfiguration.mjs';
 import Sequelize from 'sequelize';
 
-const Grade = db.define('Grade', {
-  GradeID: {
+const Course = db.define('Course', {
+  CourseID: {
     type: Sequelize.INTEGER,
     primaryKey: true,
     autoIncrement: true,
     allowNull: false,
   },
-  GradeValue: {
+  CourseName: {
     type: Sequelize.STRING(255),
-    allowNull: false,
-  },
-  Comments: {
-    type: Sequelize.TEXT,
-  },
-  CourseID: {
-    type: Sequelize.INTEGER,
     allowNull: false,
   },
   StudentID: {
@@ -25,5 +18,4 @@ const Grade = db.define('Grade', {
   },
 });
 
-
-export default Grade;
+export default Course;
