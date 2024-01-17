@@ -43,7 +43,7 @@ studentRouter.route("/student/signin")
                 return res.status(400).json("Missing email or password");
             }
 
-            let student = await getStudentByUserNamePasswordEmailFunction(req.body.password, req.body.email);
+            let student = await getStudentByPasswordEmailFunction(req.body.password, req.body.email);
 
             if (student) {
                 return res.status(200).json(student);
