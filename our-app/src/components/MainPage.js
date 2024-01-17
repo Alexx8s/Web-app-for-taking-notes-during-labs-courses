@@ -1,11 +1,11 @@
 // MainPage.js
 import React, { useState } from 'react';
 import '../components-styles/MainPage.css';
-import NavBar from './NavBar';
-import Notebook from './Notebook';
-import AddNewNotebook from './AddNewNotebook';
+import NavBar from './NavBar.js';
+import Notebook from './Notebook.js';
+import AddNewNotebook from './AddNewNotebook.js';
 
-const MainPage = () => {
+const MainPage = ({studentID}) => {
   const [selectedNotebook, setSelectedNotebook] = useState(null);
   const [isNotebookVisible, setIsNotebookVisible] = useState(false);
   const [isAddNewVisible, setIsAddNewVisible] = useState(false);

@@ -15,7 +15,7 @@ export async function Create_DB() {
     try {
         const connection = await mysql.createConnection({
             user: "root",
-            password: "",
+            password: "1234",
         });
 
         conn = connection;
@@ -63,55 +63,55 @@ function DB_Init() {
     });
 }
 
-async function seedDatabase() {
-    // Initialize the database
-    await Create_DB();
+// async function seedDatabase() {
+//     // Initialize the database
+//     await Create_DB();
 
-    // Add some sample data
-    try {
-        const student = await Student.create({
-            // Provide student data
-            StudentID: 1,
-            Email: "johndoe@gmail.com",
-            Password: "1234",
-            FirstName: "John",
-            LastName: "Doe",
-        });
+//     // Add some sample data
+//     try {
+//         const student = await Student.create({
+//             // Provide student data
+//             StudentID: 1,
+//             Email: "johndoe@gmail.com",
+//             Password: "1234",
+//             FirstName: "John",
+//             LastName: "Doe",
+//         });
 
-        const course = await Course.create({
-            // Provide course data
-            CourseID: 1,
-            CourseName: "CSE 316",
-            StudentID: 1,
-        });
+//         const course = await Course.create({
+//             // Provide course data
+//             CourseID: 1,
+//             CourseName: "CSE 316",
+//             StudentID: 1,
+//         });
 
-        const note = await Note.create({
-            // Provide note data
-            NoteID: 1,
-            Title: "Test Note",
-            Content: "This is a test note",
-            CourseID: 1,
-        });
+//         const note = await Note.create({
+//             // Provide note data
+//             NoteID: 1,
+//             Title: "Test Note",
+//             Content: "This is a test note",
+//             CourseID: 1,
+//         });
 
-        const tag = await Tag.create({
-            // Provide tag data
-            TagID: 1,
-            TagName: "Test Tag",
-        });
+//         const tag = await Tag.create({
+//             // Provide tag data
+//             TagID: 1,
+//             TagName: "Test Tag",
+//         });
 
-        // Associate the data
-        await student.addCourse(course);
-        await student.addNote(note);
-        await note.addTag(tag);
+//         // Associate the data
+//         await student.addCourse(course);
+//         await student.addNote(note);
+//         await note.addTag(tag);
 
-        console.log('Sample data added to the database.');
-    } catch (error) {
-        console.error('Error seeding the database:', error);
-    }
-}
+//         console.log('Sample data added to the database.');
+//     } catch (error) {
+//         console.error('Error seeding the database:', error);
+//     }
+// }
 
 // Uncomment the line below when you want to seed the database
-seedDatabase();
+// seedDatabase();
 
 // export { Create_DB, FK_Config, DB_Init, seedDatabase };
 export default DB_Init;
