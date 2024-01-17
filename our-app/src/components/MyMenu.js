@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import AddGroup from './AddGroup';
 import '../components-style/MyMenu.css';
-import AddCourse from './AddCourse'; // Assuming you have an AddCourse component
+import AddCourse from './AddCourse';
 import axios from 'axios';
 
 const MyMenu = ({ studentID, onCourseSelect, onHomeClick, updateCourses, onTagSelect }) => {

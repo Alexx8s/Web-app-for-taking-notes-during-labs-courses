@@ -16,6 +16,14 @@ const Course = db.define('Course', {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
-});
+},
+  {
+    tablename: "Courses",
+    timestamps: false
+  });
+
+db.sync()
+    .then(() => console.log('Task table has been successfully created, if one doesn\'t exist'))
+    .catch(error => console.log('This error occured', error));
 
 export default Course;

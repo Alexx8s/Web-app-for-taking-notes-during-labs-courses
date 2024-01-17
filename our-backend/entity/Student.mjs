@@ -27,6 +27,13 @@ const Student = db.define('Student', {
     type: Sequelize.STRING,
     allowNull: false,
   },
-});
+},
+  {
+    tablename: "Student",
+    timestamps: false
+  });
+  db.sync()
+  .then(() => console.log('Task table has been successfully created, if one doesn\'t exist'))
+  .catch(error => console.log('This error occured', error));
 
 export default Student;
