@@ -1,20 +1,25 @@
 import React, { useState } from 'react';
-import SignIn from './components/SignIn';
-import SignUp from './components/SignUp';
+import axios from 'axios';
+
+import AuthComponent from './components/AuthComponent';
+import AuthSignUp from './components/AuthSignUp';
 import MainPage from './components/MainPage';
 
 function App() {
-  const [redirectToMain, setRedirectToMain] = useState(false);
-  const [userId, setUserId] = useState(null);
+  const [showSignIn, setShowSignIn] = useState(true);
+  const [showSignUp, setShowSignUp] = useState(false);
+  const [authenticated, setAuthenticated] = useState(false);
 
-  const handleSignIn = () => {
-    console.log('Sign In');
+  const handleSignIn = (email, password) => {
+    console.log('Sign In:', { email, password });
+
     if (email && password) {
-      onSignIn(email, password)
-      return axios.post('your_signin_endpoint', { email, password })
+      // Replace 'http://localhost:9000/api/user/signin' with your actual endpoint
+      return axios.post('http://localhost:8003/api/user/signin', { email, password })
         .then((response) => {
           console.log('Sign In Successful:', response.data);
           // Additional logic after successful sign-in if needed
+          setAuthenticated(true);
         })
         .catch(() => {
           console.error('Sign In Failed');
@@ -24,23 +29,47 @@ function App() {
       // Handle empty fields
       console.error('Email and password are required');
     }
-    // Perform sign-in logic, if successful:
-    setAuthenticated(true);
-  
+  };
 
-    // Redirect to the main page upon successful sign-in
-    setRedirectToMain(true);
+  const handleSignUp = (userData) => {
+    console.log('Sign Up:', userData);
 
-    // Return a promise for consistent handling
-    return Promise.resolve();
+    const { firstName, lastName, email, password } = userData;
+
+    if (firstName === '' || lastName === '' || email === '' || password === '') {
+      // Handle empty fields
+      console.error('Please fill out all fields.');
+    } else if (email.includes('@stud.ase.ro') === false) {
+      // Handle invalid email
+      console.error('Please use your student email.');
+    } else {
+      // Perform sign-up logic (without axios and onSignUpSuccess)
+      console.log('Sign Up:', { firstName, lastName, email, password });
+      // You can add any logic you need here for the sign-up process
+      setAuthenticated(true);
+    }
+  };
+  if (redirectToMain) {
+    return <MainPage userId={userId} />;
+  }
+
+  const handleToggleAuth = () => {
+    setShowSignIn(!showSignIn);
+    setShowSignUp(!showSignUp);
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <SignIn onSignIn={handleSignIn} />
-      </header>
+    <div>
+      {!authenticated && showSignIn && (
+        <AuthComponent onSignIn={handleSignIn} onToggleAuth={handleToggleAuth} />
+        
+      )}
+      {!authenticated && showSignUp && (
+        <AuthSignUp onSignUp={handleSignUp} onToggleAuth={handleToggleAuth} />
+      )}
+      {authenticated && <MainPage />}
     </div>
   );
 }
+
 export default App;

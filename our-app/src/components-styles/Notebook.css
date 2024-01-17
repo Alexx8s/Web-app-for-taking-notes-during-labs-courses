@@ -1,0 +1,36 @@
+/* Enhanced Notebook Styles */
+
+.notebook-details {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #3498db;
+  border-radius: 10px;
+  background-color: #ecf0f1;
+  box-shadow: 0 0 20px rgba(52, 152, 219, 0.2);
+  transition: transform 0.3s ease-in-out;
+}
+
+.notebook-details:hover {
+  transform: scale(1.02);
+}
+
+.notebook-details h2 {
+  color: #3498db;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.notebook-details p {
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #555;
+}
+
+.notebook-details .content {
+  margin-top: 10px;
+  white-space: pre-line;
+  line-height: 1.6;
+}
+
+/* Add more styling as needed */

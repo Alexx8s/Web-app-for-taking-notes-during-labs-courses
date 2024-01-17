@@ -1,26 +1,42 @@
 import React, { useState } from 'react';
 import '../components-styles/AuthComponent.css';
-import AuthSignUp from './AuthSignUp'; // Update the import based on your file structure
+import MainPage from './MainPage';
+import AuthSignUp from './AuthSignUp';
+import axios from 'axios';
 
 const AuthComponent = ({ onSignIn, onToggleAuth }) => {
   const [showSignUp, setShowSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [authenticated, setAuthenticated] = useState(false);
 
   const handleSignIn = () => {
-    // Handle sign-in logic
-    console.log('Sign In:', { email, password });
-    onSignIn(); // Assuming you want to perform additional actions after sign-in
+    if (email && password) {
+      // Assuming you have these states declared in your component
+      axios.post('http://localhost:8003/api/user/signin', { email, password })
+        .then((response) => {
+          console.log('Sign In Successful:', response.data);
+          setAuthenticated(true);
+        })
+        .catch(() => {
+          console.error('Sign In Failed');
+          // Handle sign-in failure if needed
+        });
+    } else {
+      // Handle empty fields
+      console.error('Email and password are required');
+    }
   };
 
   const handleToggleSignUp = () => {
+    
     setShowSignUp(!showSignUp);
     onToggleAuth(); // Toggle between sign-in and sign-up
   };
 
   return (
     <div>
-      {!showSignUp && (
+      {!showSignUp && !authenticated && (
         <div className="auth-container">
           <h2>Sign In</h2>
           <div className="input-group">
@@ -37,6 +53,7 @@ const AuthComponent = ({ onSignIn, onToggleAuth }) => {
         </div>
       )}
       {showSignUp && <AuthSignUp onToggleAuth={onToggleAuth} />}
+      {authenticated && <MainPage />}
     </div>
   );
 };
