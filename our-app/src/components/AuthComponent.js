@@ -1,4 +1,3 @@
-// AuthComponent.js
 import React, { useState } from 'react';
 import '../components-styles/AuthComponent.css';
 import AuthSignUp from './AuthSignUp'; // Update the import based on your file structure

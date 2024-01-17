@@ -1,5 +1,3 @@
-import logo from './logo.svg';
-import './App.css';
 import React, { useState } from 'react';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
@@ -9,11 +7,26 @@ function App() {
   const [redirectToMain, setRedirectToMain] = useState(false);
   const [userId, setUserId] = useState(null);
 
-  const handleSignIn = async (email, password) => {
-    // Perform sign-in logic here, for example, make an API call to authenticate the user
-
-    // Assuming your authentication logic sets the userId upon successful sign-in
-    setUserId('123'); // Replace '123' with the actual userId if available
+  const handleSignIn = () => {
+    console.log('Sign In');
+    if (email && password) {
+      onSignIn(email, password)
+      return axios.post('your_signin_endpoint', { email, password })
+        .then((response) => {
+          console.log('Sign In Successful:', response.data);
+          // Additional logic after successful sign-in if needed
+        })
+        .catch(() => {
+          console.error('Sign In Failed');
+          // Handle sign-in failure if needed
+        });
+    } else {
+      // Handle empty fields
+      console.error('Email and password are required');
+    }
+    // Perform sign-in logic, if successful:
+    setAuthenticated(true);
+  
 
     // Redirect to the main page upon successful sign-in
     setRedirectToMain(true);
@@ -21,10 +34,6 @@ function App() {
     // Return a promise for consistent handling
     return Promise.resolve();
   };
-
-  if (redirectToMain) {
-    return <MainPage userId={userId} />;
-  }
 
   return (
     <div className="App">
@@ -34,5 +43,4 @@ function App() {
     </div>
   );
 }
-
 export default App;

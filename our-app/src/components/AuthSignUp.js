@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
-import '../components-styles/AuthSignUp.css';
 
 const AuthSignUp = ({ onSignUp, onToggleAuth }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [firstName, setFirstName] = useState(''); // Add first name
-    const [lastName, setLastName] = useState(''); // Add last name
   
     const handleSignUp = () => {
       // Handle sign-up logic
