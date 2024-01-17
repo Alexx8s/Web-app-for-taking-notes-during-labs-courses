@@ -1,0 +1,47 @@
+/* AddNewNotebook.css */
+.add-new-notebook {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .add-new-notebook h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  .add-new-notebook form {
+    display: grid;
+    gap: 10px;
+  }
+  
+  .add-new-notebook label {
+    font-size: 14px;
+  }
+  
+  .add-new-notebook input,
+  .add-new-notebook textarea,
+  .add-new-notebook select {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+  
+  .add-new-notebook button {
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .add-new-notebook button:hover {
+    background-color: #2980b9;
+  }
+  

@@ -1,0 +1,29 @@
+/* Notebook.css */
+.notebook-details {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .notebook-details h2 {
+    color: #333;
+  }
+  
+  .notebook-details p {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #777;
+  }
+  
+  .notebook-details .content {
+    margin-top: 10px;
+    white-space: pre-line;
+    line-height: 1.5;
+  }
+  
+  /* Add more styling as needed */
+  

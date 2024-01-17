@@ -1,234 +1,110 @@
-import React, { useEffect, useState } from 'react';
-import { Container, Col } from 'react-bootstrap';
-import axios from 'axios';
-import MyCard from './MyCard';
-import MyMenu from './MyMenu';
-import AddNote from './AddNote';  // Import your AddNote component
-import NotePage from './NotePage';  // Import your NotePage component
-import '../components-style/MainPage.css';
-import '../components-style/TagSelectionPopup.css';
+// MainPage.js
+import React, { useState } from 'react';
+import '../components-styles/MainPage.css';
+import NavBar from './NavBar';
+import Notebook from './Notebook';
+import AddNewNotebook from './AddNewNotebook';
 
-const MainPage = ({ userId }) => {
-  const [notes, setNotes] = useState([]);  // Use your Note entity
-  const [selectedNote, setSelectedNote] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filteredNotes, setFilteredNotes] = useState([]);
-  const [tags, setTags] = useState([]);  // Use your Tag entity
-  const [subjects, setSubjects] = useState([]);  // Use your Subject entity
-  const [selectedSubject, setSelectedSubject] = useState('');
-  const [selectedTag, setSelectedTag] = useState(null);
+const MainPage = () => {
+  const [selectedNotebook, setSelectedNotebook] = useState(null);
+  const [isNotebookVisible, setIsNotebookVisible] = useState(false);
+  const [isAddNewVisible, setIsAddNewVisible] = useState(false);
 
-  const fetchAllTags = async () => {
-    try {
-      const response = await axios.get('http://localhost:9000/api/notes');  // Modify API endpoint
-      const tagsMap = {};
+  const testContent = `
+    <h1>This is a Test Header 1</h1>
+    <p>This is a test paragraph with <i>italic</i> and <b>bold</b> text.</p>
+    <h2>This is a Test Header 2</h2>
+    <p>Another test paragraph with <u>underline</u> and <i>italic</i> text.</p>
+    <h3>This is a Test Header 3</h3>
+    <p>One more test paragraph with <b>bold</b> and <i>italic</i> text.</p>
+  `;
 
-      response.data.forEach((note) => {  // Modify to match your Note entity
-        const noteId = note.NoteID;  // Modify to match your Note entity
-        const tags = note.Tags.map((tag) => tag.TagName);  // Modify to match your Note entity
-        tagsMap[noteId] = tags;
-      });
+  const notebooks = [
+    { id: 1, title: 'Notebook 1', userEmail: 'user@example.com', content: 'Content 1', course: 'CourseA' },
+    { id: 2, title: 'Notebook 2', userEmail: 'user@example.com', content: 'Content 2', course: 'CourseB' },
+    { id: 3, title: 'Notebook 3', userEmail: 'mail@mail.com', content: testContent, course: 'CourseA' },
+  ];
 
-      console.log('Tags:', tagsMap);
-      setTags(tagsMap);
-    } catch (error) {
-      console.error('Error fetching tags:', error);
-    }
+  const handleAddNotebook = () => {
+    setIsAddNewVisible(true);
   };
 
-  const fetchSubjects = async () => {
-    try {
-      const response = await axios.get(`http://localhost:9000/api/subjects/${userId}`);
-      setSubjects(response.data);
-    } catch (error) {
-      console.error('Error fetching subjects:', error);
-    }
+  const handleLogout = () => {
+    console.log('Logout');
+    // Implement logic for logging out
+    // For example, you can reset the authentication status
   };
 
-  const handleSearchChange = (e) => {
-    const query = e.target.value.toLowerCase();
-    setSearchQuery(query);
-
-    const filtered = notes.filter((note) =>
-      note.Title.toLowerCase().includes(query)
-    );
-    setFilteredNotes(filtered);
+  const handleShare = () => {
+    console.log('Share');
+    // Implement logic for sharing
   };
 
-  const handleSubjectTagFilter = (subjectID, selectedTag) => {
-    const filteredBySubject = notes.filter(
-      (note) => note.SubjectID.toString() === subjectID
-    );
-
-    let filteredNotes = filteredBySubject;
-
-    if (selectedTag) {
-      // If a tag is selected, further filter by the tag
-      filteredNotes = filteredBySubject.filter((note) =>
-        tags[note.NoteID]?.includes(selectedTag)
-      );
-    }
-
-    const filteredBySearch = filteredNotes.filter((note) =>
-      note.Title.toLowerCase().includes(searchQuery)
-    );
-
-    setFilteredNotes(filteredBySearch);
+  const handleNotebookClick = (notebook) => {
+    setSelectedNotebook(notebook);
+    setIsNotebookVisible(true);
   };
 
-  const handleTagSelect = (selectedTag) => {
-    // Update the selected tag
-    setSelectedTag(selectedTag);
-    // Filter notes based on the selected tag and subject
-    handleSubjectTagFilter(selectedSubject, selectedTag);
+  const handleCloseNotebook = () => {
+    setIsNotebookVisible(false);
   };
 
-  const handleSubjectSelect = (subjectID) => {
-    // Set the selected subject and filter notes based on the selected subject and tag
-    setSelectedSubject(subjectID);
-    handleSubjectTagFilter(subjectID, selectedTag);
+  const handleCloseAddNew = () => {
+    setIsAddNewVisible(false);
   };
-
-  const handleDelete = async (noteID) => {
-    try {
-      const response = await axios.delete(
-        `http://localhost:9000/api/note/${noteID}`
-      );
-      console.log('Note deleted:', response.data);
-
-      const newNotes = notes.filter(
-        (note) => note.NoteID !== noteID
-      );
-      setNotes(newNotes);
-
-      setFilteredNotes(newNotes);
-
-      if (selectedNote && selectedNote.NoteID === noteID) {
-        setSelectedNote(null);
-      }
-    } catch (error) {
-      console.error('Error during deleting the note:', error);
-    }
-  };
-
-  const getNotesByUserId = async (id) => {
-    try {
-      const response = await axios.get(
-        `http://localhost:9000/api/note/noteUser/${id}`
-      );
-      console.log('Personal Notes:', response.data);
-      setNotes(response.data);
-      setFilteredNotes(response.data);
-    } catch (error) {
-      console.error(
-        'Error during displaying the personal notes:',
-        error
-      );
-      throw error;
-    }
-  };
-
-  const addNewNote = (newNote) => {
-    const updatedPersonalNotes = [...notes, newNote];
-    setNotes(updatedPersonalNotes);
-
-    setFilteredNotes(updatedPersonalNotes);
-  };
-
-  const handleCardClick = (note) => {
-    setSelectedNote(note);
-  };
-
-  const handleNoteUpdated = (noteID, updatedData) => {
-    const updatedNotes = notes.map((note) =>
-      note.NoteID === noteID ? { ...note, ...updatedData } : note
-    );
-    setNotes(updatedNotes);
-
-    const updatedFilteredNotes = filteredNotes.map((note) =>
-      note.NoteID === noteID ? { ...note, ...updatedData } : note
-    );
-    setFilteredNotes(updatedFilteredNotes);
-  };
-
-  const handleHomeClick = () => {
-    setSearchQuery('');
-    setSelectedSubject('');
-    setFilteredNotes(notes);
-  };
-
-  useEffect(() => {
-    if (userId) {
-      getNotesByUserId(userId);
-      fetchAllTags();
-      fetchSubjects();
-    }
-  }, [userId]);
 
   return (
-    <React.Fragment>
-      <Container fluid className="main-page-container">
-        {selectedNote ? (
-          <NotePage
-            note={selectedNote}
-            onClose={() => setSelectedNote(null)}
-            onNoteUpdated={handleNoteUpdated}
-          />
-        ) : (
-          <React.Fragment>
-            <Col md={12} className="search-bar">
-              <input
-                type="text"
-                placeholder="Search by title"
-                value={searchQuery}
-                onChange={handleSearchChange}
-              />
-            </Col>
-            <Col md={12} className="add-card-button">
-              <AddNote
-                user={userId}
-                onNoteAdded={addNewNote}
-                funcSubjectChange={handleSubjectSelect}
-                subjects={subjects}
-                onTagSelect={handleTagSelect}
-                selectedTag={selectedTag} // Pass the selected tag to AddNote
-              />
-            </Col>
-            <Col md={8} className="card-list">
-              {filteredNotes
-                .filter((note) => note && note.Title)
-                .map((note) => (
-                  <MyCard
-                    key={note.NoteID}
-                    title={note.Title}
-                    content={note.Content}
-                    userid={note.UserID}
-                    subjectid={note.SubjectID}
-                    groupid={1} // note.GroupID
-                    tags={tags[note.NoteID] || []}
-                    selectedTag={selectedTag} // Pass the selected tag to MyCard
-                    onDoubleClick={() =>
-                      handleCardClick(note)
-                    }
-                    onDelete={() =>
-                      handleDelete(note.NoteID)
-                    }
-                  />
-                ))}
-            </Col>
-            <Col md={4} className="menu-column">
-              <MyMenu
-                userID={userId}
-                onSubjectSelect={handleSubjectSelect}
-                onHomeClick={handleHomeClick}
-                updateSubjects={fetchSubjects}
-                onTagSelect={handleTagSelect}
-              />
-            </Col>
-          </React.Fragment>
-        )}
-      </Container>
-    </React.Fragment>
+    <div className="main-page">
+      <NavBar
+        onAddNotebook={handleAddNotebook}
+        onLogout={handleLogout}
+        onShare={handleShare}
+      />
+      <div className="sarchBar">
+        <input type="text" placeholder="Search" id="searchBar" />
+        </div>
+
+      <div className="notebooks">
+        {notebooks.map((notebook) => (
+          <div className="notebook" key={notebook.id} onClick={() => handleNotebookClick(notebook)}>
+            <h3>{notebook.title}</h3>
+            <div className="course">{notebook.course}</div>
+          </div>
+        ))}
+      </div>
+      {isNotebookVisible && selectedNotebook && (
+        <Notebook
+          title={selectedNotebook.title}
+          userEmail={selectedNotebook.userEmail}
+          content={selectedNotebook.content}
+          course={selectedNotebook.course}
+          onClose={handleCloseNotebook}
+        />
+      )}
+
+      {isAddNewVisible && (
+        <AddNewNotebook onClose={handleCloseAddNew} />
+      )}
+
+      <div className="filters">
+        <div className="filter">
+          <label>Course:</label>
+          <select>
+            <option value="">All</option>
+            <option value="CourseA">Course A</option>
+            <option value="CourseB">Course B</option>
+          </select>
+        </div>
+        <div className="filter">
+          <label>Tags:</label>
+          <select>
+            <option value="">All</option>
+            <option value="TagA">Tag A</option>
+            <option value="TagB">Tag B</option>
+          </select>
+        </div>
+      </div>
+    </div>
   );
 };
 
