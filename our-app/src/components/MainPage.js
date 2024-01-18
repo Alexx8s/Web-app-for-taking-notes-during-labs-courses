@@ -53,6 +53,11 @@ const MainPage = ({ studentID }) => {
     setNotebooks((prevNotebooks) => [...prevNotebooks, newNotebook]);
   };
 
+  const handleNotebookEdited = () => {
+    // Fetch the updated list of notes after editing
+    getNotesByUserId(studentID);
+  };
+
   const getNotesByUserId = async (studentID) => {
     try {
       const response = await axios.get(`http://localhost:8003/api/note/student/${studentID}`);
@@ -117,14 +122,20 @@ const MainPage = ({ studentID }) => {
           course={selectedNotebook.CourseID}
           onClose={handleCloseNotebook}
           onDelete={handleNotebookDeleted}
+          onEdit={handleNotebookEdited}  
         />
       )}
 
       {isAddNewVisible && (
-        <AddNewNotebook onClose={handleCloseAddNew} onNotebookAdded={handleNotebookAdded} studentId={studentID} />
+        <AddNewNotebook
+          onClose={handleCloseAddNew}
+          onNotebookAdded={handleNotebookAdded}
+          onNotebookEdited={handleNotebookEdited} 
+          studentId={studentID}
+        />
       )}
 
-      <div className="filters">
+<div className="filters">
         <div className="filter">
           <label>Course:</label>
           <select
@@ -145,5 +156,4 @@ const MainPage = ({ studentID }) => {
     </div>
   );
 };
-
 export default MainPage;

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import '../components-styles/AddNewNotebook.css';
 import axios from 'axios';
 
-function AddNewNotebook({ onClose, onNotebookAdded, studentId }) {
+function AddNewNotebook({ onClose, onNotebookAdded, onNotebookEdited, studentId, initialNotebook }) {
   const [courses, setCourses] = useState([]);
   const [isFormVisible, setFormVisible] = useState(false);
   const [notebookData, setNotebookData] = useState({
@@ -12,6 +12,14 @@ function AddNewNotebook({ onClose, onNotebookAdded, studentId }) {
     CourseID: '', // Updated to store the selected course's ID
     StudentID: studentId,
   });
+
+  useEffect(() => {
+    // If initialNotebook is provided, populate the form with its data for editing
+    if (initialNotebook) {
+      setNotebookData(initialNotebook);
+      setFormVisible(true);
+    }
+  }, [initialNotebook]);
 
   // Fetch courses from the API
   useEffect(() => {
@@ -37,14 +45,21 @@ function AddNewNotebook({ onClose, onNotebookAdded, studentId }) {
 
   const handleSaveNotebook = async () => {
     try {
-      const response = await axios.post('http://localhost:8003/api/note', notebookData, {
-        headers: { 'Content-Type': 'application/json' },
-      });
-
-      console.log('Note created successfully:', response.data);
-
-      // Call the onNotebookAdded function with the newly created notebook
-      onNotebookAdded(response.data.obj);
+      if (initialNotebook) {
+        // If initialNotebook exists, it means we are editing, so make a PUT request
+        await axios.put(`http://localhost:8003/api/note/${initialNotebook.NoteID}`, notebookData, {
+          headers: { 'Content-Type': 'application/json' },
+        });
+        // Call the onNotebookEdited function with the edited notebook
+        onNotebookEdited();
+      } else {
+        // If initialNotebook is not provided, it means we are creating, so make a POST request
+        const response = await axios.post('http://localhost:8003/api/note', notebookData, {
+          headers: { 'Content-Type': 'application/json' },
+        });
+        // Call the onNotebookAdded function with the newly created notebook
+        onNotebookAdded(response.data.obj);
+      }
 
       setNotebookData({
         Title: '',
@@ -55,7 +70,7 @@ function AddNewNotebook({ onClose, onNotebookAdded, studentId }) {
 
       toggleFormVisibility();
     } catch (error) {
-      console.error('Error creating note:', error);
+      console.error('Error creating/editing note:', error);
     }
   };
 
@@ -97,7 +112,7 @@ function AddNewNotebook({ onClose, onNotebookAdded, studentId }) {
 
   return (
     <div className="add-new-notebook">
-      <h2>Add New Notebook</h2>
+      <h2>{initialNotebook ? 'Edit Notebook' : 'Add New Notebook'}</h2>
       <form>
         <label>Title:</label>
         <input
@@ -118,7 +133,7 @@ function AddNewNotebook({ onClose, onNotebookAdded, studentId }) {
         {renderCoursesDropdown()}
 
         <button type="button" onClick={handleSaveNotebook}>
-          Add Notebook
+          {initialNotebook ? 'Save Changes' : 'Add Notebook'}
         </button>
         <button type="button" onClick={onClose}>
           Cancel

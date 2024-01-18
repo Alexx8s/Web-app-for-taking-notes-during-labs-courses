@@ -59,6 +59,7 @@ async function createNote(note) {
     }
 }
 
+
 // async function createNote(StudentID, Title, Content, CourseID) {
 //     try {
 //         const courseExists = await Course.findByPk(note.CourseID);

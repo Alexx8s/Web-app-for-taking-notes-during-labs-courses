@@ -33,6 +33,7 @@ noteRouter.route("/note/:id").get(async (req, res) => {
 noteRouter.route("/note/:id").delete(async (req, res) => {
     return res.json(await deleteNote(req.params.id));
 });
+
 noteRouter.route("/note/:id").put(async (req, res) => {
     let ret = await updateNote(req.params.id, req.body);
 
@@ -41,6 +42,7 @@ noteRouter.route("/note/:id").put(async (req, res) => {
     else
         res.status(200).json(ret.obj)
 });
+
 
 noteRouter.route('/note/noteFilter/:id').get( async (req, res) => {
     return res.json(await getNotesWithFilterAndPagination(req.query));
