@@ -10,39 +10,10 @@ const MainPage = ({ studentID }) => {
   const [selectedNotebook, setSelectedNotebook] = useState(null);
   const [isNotebookVisible, setIsNotebookVisible] = useState(false);
   const [isAddNewVisible, setIsAddNewVisible] = useState(false);
-  const [notes, setNotes] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCourse, setSelectedCourse] = useState('');
-
-  const testContent = `
-    <h1>This is a Test Header 1</h1>
-    <p>This is a test paragraph with <i>italic</i> and <b>bold</b> text.</p>
-    <h2>This is a Test Header 2</h2>
-    <p>Another test paragraph with <u>underline</u> and <i>italic</i> text.</p>
-    <h3>This is a Test Header 3</h3>
-    <p>One more test paragraph with <b>bold</b> and <i>italic</i> text.</p>
-  `;
-
-  const hardcodedCourses = [
-    { CourseID: 1, CourseName: 'Math' },
-    { CourseID: 2, CourseName: 'Science' },
-    { CourseID: 3, CourseName: 'History' },
-    { CourseID: 4, CourseName: 'English' },
-    { CourseID: 5, CourseName: 'Computer Science' },
-  ];
-
-  const notebooks = [
-    { id: 1, title: 'Math Notebook 1', userEmail: 'user@example.com', content: 'Content 1', course: 'Math' },
-    { id: 2, title: 'Science Notebook 1', userEmail: 'user@example.com', content: 'Content 2', course: 'Science' },
-    { id: 3, title: 'History Notebook 1', userEmail: 'mail@mail.com', content: testContent, course: 'History' },
-    { id: 4, title: 'English Notebook 1', userEmail: 'user@example.com', content: 'Content 3', course: 'English' },
-    { id: 5, title: 'Computer Science Notebook 1', userEmail: 'user@example.com', content: 'Content 4', course: 'Computer Science' },
-    { id: 6, title: 'Math Notebook 2', userEmail: 'mail@mail.com', content: 'Content 5', course: 'Math' },
-    { id: 7, title: 'Science Notebook 2', userEmail: 'user@example.com', content: 'Content 6', course: 'Science' },
-    { id: 8, title: 'History Notebook 2', userEmail: 'mail@mail.com', content: 'Content 7', course: 'History' },
-    { id: 9, title: 'English Notebook 2', userEmail: 'user@example.com', content: 'Content 8', course: 'English' },
-    { id: 10, title: 'Computer Science Notebook 2', userEmail: 'user@example.com', content: 'Content 9', course: 'Computer Science' },
-  ];
+  const [notebooks, setNotebooks] = useState([]);
+  const [courses, setCourses] = useState([]);
 
   const handleAddNotebook = () => {
     setIsAddNewVisible(true);
@@ -73,19 +44,31 @@ const MainPage = ({ studentID }) => {
   };
 
   const getNotesByUserId = async (studentID) => {
-    // try {
-    //   const response = await axios.get(`http://localhost:8003/api/note/${studentID}`);
-    //   console.log('Notes:', response.data);
-    //   setNotes(response.data);
-    // } catch (error) {
-    //   console.error('Error during getting notes:', error);
-    //   throw error;
-    // }
+    try {
+      const response = await axios.get(`http://localhost:8003/api/note/student/${studentID}`);
+      console.log('Notes:', response.data);
+      setNotebooks(response.data);
+    } catch (error) {
+      console.error('Error during getting notes:', error);
+      throw error;
+    }
+  };
+
+  const getCoursesByStudId = async (studentID) => {
+    try {
+      const response = await axios.get(`http://localhost:8003/api/course/${studentID}`);
+      console.log('Courses:', response.data);
+      setCourses(response.data);
+    } catch (error) {
+      console.error('Error during getting courses:', error);
+      throw error;
+    }
   };
 
   useEffect(() => {
     if (studentID) {
       getNotesByUserId(studentID);
+      getCoursesByStudId(studentID);
     }
   }, [studentID]);
 
@@ -105,22 +88,22 @@ const MainPage = ({ studentID }) => {
       <div className="notebooks">
         {notebooks
           .filter((notebook) =>
-            notebook.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
-            (selectedCourse === '' || notebook.course === selectedCourse)
+            notebook.Title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+            (selectedCourse === '' || notebook.CourseID === selectedCourse)
           )
           .map((notebook) => (
-            <div className="notebook" key={notebook.id} onClick={() => handleNotebookClick(notebook)}>
-              <h3>{notebook.title}</h3>
-              <div className="course">{notebook.course}</div>
+            <div className="notebook" key={notebook.NoteID} onClick={() => handleNotebookClick(notebook)}>
+              <h3>{notebook.Title}</h3>
+              <div className="course">{notebook.CourseID}</div>
             </div>
           ))}
       </div>
       {isNotebookVisible && selectedNotebook && (
         <Notebook
-          title={selectedNotebook.title}
+          title={selectedNotebook.Title}
           userEmail={selectedNotebook.userEmail}
-          content={selectedNotebook.content}
-          course={selectedNotebook.course}
+          content={selectedNotebook.Content}
+          course={selectedNotebook.CourseID}
           onClose={handleCloseNotebook}
         />
       )}
@@ -137,11 +120,13 @@ const MainPage = ({ studentID }) => {
             onChange={(e) => setSelectedCourse(e.target.value)}
           >
             <option value="">All</option>
-            {hardcodedCourses.map((course) => (
-              <option key={course.CourseID} value={course.CourseName}>
-                {course.CourseName}
-              </option>
-            ))}
+            {Array.isArray(courses)
+              ? courses.map((course) => (
+                  <option key={course.CourseID} value={course.CourseID}>
+                    {course.CourseName}
+                  </option>
+                ))
+              : <option value={courses.CourseID}>{courses.CourseName}</option>}
           </select>
         </div>
       </div>

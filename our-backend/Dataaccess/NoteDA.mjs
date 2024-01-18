@@ -15,10 +15,19 @@ async function getNotes() {
     });
 }
 
+// async function getNoteById(id) {
+//     return await Note.findByPk(id, {
+//         include: [{ model: Tag, as: 'Tags' }]
+//     });
+// }
+
 async function getNoteById(id) {
-    return await Note.findByPk(id, {
-        include: [{ model: Tag, as: 'Tags' }]
-    });
+    return await Note.findByPk(id);
+}
+
+//function that returns the note with the given student id
+async function getNoteByStudentId(id) {
+    return await Note.findAll({ where: { StudentID: id } });
 }
 
 async function deleteNote(noteId) {
@@ -49,6 +58,21 @@ async function createNote(note) {
         return { error: true, msg: "Error creating note" };
     }
 }
+
+// async function createNote(StudentID, Title, Content, CourseID) {
+//     try {
+//         const courseExists = await Course.findByPk(note.CourseID);
+//         if (!courseExists) {
+//             return { error: true, msg: "Invalid CourseID" };
+//         }
+
+//         let createdNote = await Note.create(note);
+//         return { error: false, msg: "Note created successfully", obj: createdNote };
+//     } catch (error) {
+//         console.error('Error during note creation:', error);
+//         return { error: true, msg: "Error creating note" };
+//     }
+// }
 
 async function updateNote(id, note) {
     try {
@@ -171,5 +195,6 @@ export {
     updateNote,
     getNotesWithFilterAndPagination,
     getNotesByUserId,
-    getTagsByNoteId
+    getTagsByNoteId,
+    getNoteByStudentId
 };

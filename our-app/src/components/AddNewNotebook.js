@@ -8,20 +8,27 @@ function AddNewNotebook({ onClose, onNotebookAdded, studentId }) {
   const [notebookData, setNotebookData] = useState({
     Title: '',
     Content: '',
-    CourseID: '',
+    CourseID: '', // Updated to store the selected course's ID
+    StudentID: studentId,
   });
 
-  const hardcodedCourses = [
-    { CourseID: 1, CourseName: 'Math' },
-    { CourseID: 2, CourseName: 'Science' },
-    { CourseID: 3, CourseName: 'History' },
-    { CourseID: 4, CourseName: 'English' },
-    { CourseID: 5, CourseName: 'Computer Science' },
-  ];
-
+  // Fetch courses from the API
   useEffect(() => {
-    setCourses(hardcodedCourses);
-  }, []);
+    const fetchCourses = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8003/api/course/${studentId}`);
+        
+        // Check if the response data is an array or a single object
+        const coursesArray = Array.isArray(response.data) ? response.data : [response.data];
+        
+        setCourses(coursesArray);
+      } catch (error) {
+        console.error('Error during getting courses:', error);
+      }
+    };
+  
+    fetchCourses();
+  }, [studentId]);
 
   const toggleFormVisibility = () => {
     setFormVisible(!isFormVisible);
@@ -40,6 +47,7 @@ function AddNewNotebook({ onClose, onNotebookAdded, studentId }) {
           Title: '',
           Content: '',
           CourseID: '',
+          StudentID: studentId,
         });
         toggleFormVisibility();
       })

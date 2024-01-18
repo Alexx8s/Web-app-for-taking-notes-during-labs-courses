@@ -35,14 +35,14 @@ export async function Create_DB() {
 }
 
 function FK_Config() {
-    Course.belongsTo(Student);
-    Student.hasMany(Course);
+    Course.belongsTo(Student, { foreignKey: 'StudentID' });
+    Student.hasMany(Course, { foreignKey: 'StudentID' });
     
-    Student.hasMany(Note);
-    Note.belongsTo(Student);
+    Student.hasMany(Note, { foreignKey: 'StudentID' });
+    Note.belongsTo(Student, { foreignKey: 'StudentID' });
 
-    Course.hasMany(Note);
-    Note.belongsTo(Course);
+    Note.belongsTo(Course, { foreignKey: 'CourseID' });
+    Course.hasMany(Note, { foreignKey: 'CourseID' });
 
     Note.belongsToMany(Tag, { through: 'NoteTags' });
     Tag.belongsToMany(Note, { through: 'NoteTags' });
@@ -114,7 +114,7 @@ async function seedDatabase() {
 }
 
 // Uncomment the line below when you want to seed the database
-seedDatabase();
+// seedDatabase();
 
 export  { FK_Config, DB_Init, seedDatabase };
 export default DB_Init;

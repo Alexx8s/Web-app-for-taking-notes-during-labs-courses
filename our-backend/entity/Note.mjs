@@ -20,6 +20,10 @@ const Note = db.define('Note', {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
+  StudentID: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+  },
 }, {
   tableName: 'Notes',
   timestamps: false,

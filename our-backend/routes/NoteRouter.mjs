@@ -6,11 +6,24 @@ import {getNotes,
         updateNote,
         getNotesWithFilterAndPagination,
         getNotesByUserId,
-        getTagsByNoteId} from "../Dataaccess/NoteDA.mjs";
+        getTagsByNoteId,
+        getNoteByStudentId} from "../Dataaccess/NoteDA.mjs";
 let noteRouter = express.Router();
+
 noteRouter.route("/note").post(async (req, res) => {
-    return res.status(201).json(await createNote(req.body));
+    const id = req.body.StudentID;
+    const title = req.body.Title;
+    const content = req.body.Content;
+    const course = req.body.CourseID
+    const note = await createNote({
+        StudentID: id,
+        Title: title,
+        Content: content,
+        CourseID: course,}
+    );
+    return res.status(201).json(note);
 });
+
 noteRouter.route("/notes").get(async (req, res) => {
     return res.json(await getNotes());
 });
@@ -33,9 +46,16 @@ noteRouter.route('/note/noteFilter/:id').get( async (req, res) => {
     return res.json(await getNotesWithFilterAndPagination(req.query));
 })
 
-noteRouter.route('/note/noteUser/:id').get( async (req, res) => {
-    return res.json(await getNotesByUserId(req.params.id));
-})
+//note with student id
+noteRouter.route("/note/student/:id").get(async (req, res) => {
+    try {
+      const notes = await getNoteByStudentId(req.params.id);
+      return res.json(notes);
+    } catch (error) {
+      console.error('Error during getting notes:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
 
 noteRouter.route("/note/:id/tags").get(async (req, res) => {
     return res.json(await getTagsByNoteId(req.params.id));
