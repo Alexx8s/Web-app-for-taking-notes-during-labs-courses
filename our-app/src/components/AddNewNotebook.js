@@ -17,7 +17,7 @@ function AddNewNotebook({ onClose, onNotebookAdded, studentId }) {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get(`http://localhost:8003/api/course/${studentId}`);
+        const response = await axios.get(`http://localhost:8003/api/courses/${studentId}`);
         
         // Check if the response data is an array or a single object
         const coursesArray = Array.isArray(response.data) ? response.data : [response.data];

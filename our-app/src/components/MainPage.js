@@ -43,6 +43,11 @@ const MainPage = ({ studentID }) => {
     setIsAddNewVisible(false);
   };
 
+  const handleNotebookDeleted = () => {
+    // Fetch the updated list of notes after deletion
+    getNotesByUserId(studentID);
+  };
+
   const handleNotebookAdded = (newNotebook) => {
     // Update the notebooks state with the new notebook
     setNotebooks((prevNotebooks) => [...prevNotebooks, newNotebook]);
@@ -61,7 +66,7 @@ const MainPage = ({ studentID }) => {
 
   const getCoursesByStudId = async (studentID) => {
     try {
-      const response = await axios.get(`http://localhost:8003/api/course/${studentID}`);
+      const response = await axios.get(`http://localhost:8003/api/courses/${studentID}`);
       console.log('Courses:', response.data);
       setCourses(response.data);
     } catch (error) {
@@ -105,11 +110,13 @@ const MainPage = ({ studentID }) => {
       </div>
       {isNotebookVisible && selectedNotebook && (
         <Notebook
+          noteID={selectedNotebook.NoteID}
           title={selectedNotebook.Title}
           userEmail={selectedNotebook.userEmail}
           content={selectedNotebook.Content}
           course={selectedNotebook.CourseID}
           onClose={handleCloseNotebook}
+          onDelete={handleNotebookDeleted}
         />
       )}
 

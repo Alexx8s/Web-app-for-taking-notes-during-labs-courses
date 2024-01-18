@@ -15,7 +15,7 @@ export async function Create_DB() {
     try {
         const connection = await mysql.createConnection({
             user: "root",
-            password: "1234",
+            password: "",
         });
 
         conn = connection;
@@ -114,7 +114,7 @@ async function seedDatabase() {
 }
 
 // Uncomment the line below when you want to seed the database
-// seedDatabase();
+ //seedDatabase();
 
 export  { FK_Config, DB_Init, seedDatabase };
 export default DB_Init;

@@ -1,8 +1,9 @@
 // Notebook.js
 import React from 'react';
 import '../components-styles/Notebook.css';
+import axios from 'axios';
 
-const Notebook = ({ title, userEmail, content, course, onClose }) => {
+const Notebook = ({ noteID, title, userEmail, content, course, onClose, onDelete }) => {
   const formatContent = (rawContent) => {
     return { __html: rawContent };
   };
@@ -20,6 +21,19 @@ const Notebook = ({ title, userEmail, content, course, onClose }) => {
     window.location.href = mailtoLink;
   };
 
+  const handleDelete = async () => {
+    try {
+      // Make a DELETE request to your backend API to delete the note
+      await axios.delete(`http://localhost:8003/api/note/${noteID}`);
+      // Call the onDelete callback to update the state in the parent component
+      onDelete();
+      // Close the notebook after deletion
+      onClose();
+    } catch (error) {
+      console.error('Error deleting note:', error);
+    }
+  };
+
   return (
     <div className="notebook-details">
       <h2>{title}</h2>
@@ -28,6 +42,7 @@ const Notebook = ({ title, userEmail, content, course, onClose }) => {
       <p>Course: {course}</p>
       <button onClick={onClose} id="back">Close</button>
       <button onClick={handleSendEmail} id="sendEmail">Send via Email</button>
+      <button onClick={handleDelete} id="deleteNote">Delete Note</button>
     </div>
   );
 };
