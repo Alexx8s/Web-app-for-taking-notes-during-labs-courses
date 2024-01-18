@@ -1,3 +1,4 @@
+// AddNewNotebook.js
 import React, { useState, useEffect } from 'react';
 import '../components-styles/AddNewNotebook.css';
 import axios from 'axios';
@@ -34,26 +35,28 @@ function AddNewNotebook({ onClose, onNotebookAdded, studentId }) {
     setFormVisible(!isFormVisible);
   };
 
-  const handleSaveNotebook = () => {
-    console.log('Note Data:', notebookData);
-    axios
-      .post('http://localhost:8003/api/note', notebookData, {
+  const handleSaveNotebook = async () => {
+    try {
+      const response = await axios.post('http://localhost:8003/api/note', notebookData, {
         headers: { 'Content-Type': 'application/json' },
-      })
-      .then((response) => {
-        console.log('Note created successfully:', response.data);
-        onNotebookAdded(response.data.obj);
-        setNotebookData({
-          Title: '',
-          Content: '',
-          CourseID: '',
-          StudentID: studentId,
-        });
-        toggleFormVisibility();
-      })
-      .catch((error) => {
-        console.error('Error creating note:', error);
       });
+
+      console.log('Note created successfully:', response.data);
+
+      // Call the onNotebookAdded function with the newly created notebook
+      onNotebookAdded(response.data.obj);
+
+      setNotebookData({
+        Title: '',
+        Content: '',
+        CourseID: '',
+        StudentID: studentId,
+      });
+
+      toggleFormVisibility();
+    } catch (error) {
+      console.error('Error creating note:', error);
+    }
   };
 
   const handleCourseChange = (e) => {

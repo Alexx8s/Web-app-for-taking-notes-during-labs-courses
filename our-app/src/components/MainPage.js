@@ -43,6 +43,11 @@ const MainPage = ({ studentID }) => {
     setIsAddNewVisible(false);
   };
 
+  const handleNotebookAdded = (newNotebook) => {
+    // Update the notebooks state with the new notebook
+    setNotebooks((prevNotebooks) => [...prevNotebooks, newNotebook]);
+  };
+
   const getNotesByUserId = async (studentID) => {
     try {
       const response = await axios.get(`http://localhost:8003/api/note/student/${studentID}`);
@@ -109,7 +114,7 @@ const MainPage = ({ studentID }) => {
       )}
 
       {isAddNewVisible && (
-        <AddNewNotebook onClose={handleCloseAddNew} onNotebookAdded={AddNewNotebook} studentId={studentID} />
+        <AddNewNotebook onClose={handleCloseAddNew} onNotebookAdded={handleNotebookAdded} studentId={studentID} />
       )}
 
       <div className="filters">
