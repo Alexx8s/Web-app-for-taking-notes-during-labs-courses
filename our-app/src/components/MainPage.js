@@ -83,7 +83,8 @@ const MainPage = ({studentID}) => {
       )}
 
       {isAddNewVisible && (
-        <AddNewNotebook onClose={handleCloseAddNew} />
+        <AddNewNotebook onClose={handleCloseAddNew} 
+        studentId = {studentID}/>
       )}
 
       <div className="filters">

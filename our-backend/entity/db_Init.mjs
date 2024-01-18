@@ -69,40 +69,16 @@ function DB_Init() {
 
 //     // Add some sample data
 //     try {
-//         const student = await Student.create({
-//             // Provide student data
-//             StudentID: 1,
-//             Email: "johndoe@gmail.com",
-//             Password: "1234",
-//             FirstName: "John",
-//             LastName: "Doe",
-//         });
+//         // Loop through student IDs from 1 to 8
+//         for (let studentID = 1; studentID <= 8; studentID++) {
+//             // Create a course for each student
+//             // const course = await Course.create({
+//             //     CourseName: `CSE 316 - Course for Student ${studentID}`,
+//             //     StudentID: studentID,
+//             // });
 
-//         const course = await Course.create({
-//             // Provide course data
-//             CourseID: 1,
-//             CourseName: "CSE 316",
-//             StudentID: 1,
-//         });
-
-//         const note = await Note.create({
-//             // Provide note data
-//             NoteID: 1,
-//             Title: "Test Note",
-//             Content: "This is a test note",
-//             CourseID: 1,
-//         });
-
-//         const tag = await Tag.create({
-//             // Provide tag data
-//             TagID: 1,
-//             TagName: "Test Tag",
-//         });
-
-//         // Associate the data
-//         await student.addCourse(course);
-//         await student.addNote(note);
-//         await note.addTag(tag);
+//             console.log(`Course added for StudentID ${studentID}`);
+//         }
 
 //         console.log('Sample data added to the database.');
 //     } catch (error) {
@@ -110,8 +86,9 @@ function DB_Init() {
 //     }
 // }
 
+
 // Uncomment the line below when you want to seed the database
 // seedDatabase();
 
-// export { Create_DB, FK_Config, DB_Init, seedDatabase };
+// export { FK_Config, DB_Init, seedDatabase };
 export default DB_Init;

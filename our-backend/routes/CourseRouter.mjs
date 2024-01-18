@@ -29,7 +29,7 @@ courseRouter.route("/course/:id")
 
 courseRouter.route("/courses/:id")
     .get(async (req, res) => {
-        return res.json(await getCoursesByUserFunction(req.params.id));
+        return res.json(await getCoursesByStudentFunction(req.params.id));
     });
 
 export default courseRouter;
