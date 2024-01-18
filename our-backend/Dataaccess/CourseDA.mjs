@@ -4,8 +4,8 @@ async function getCourses() {
     return await Course.findAll();
 }
 
-async function getCourseById(id) {
-    return await Course.findByPk(id);
+async function getCourseById(ID) {
+    return await Course.findByPk(ID);
 }
 
 async function createCourse(course) {
@@ -18,8 +18,8 @@ async function createCourse(course) {
     }
 }
 
-async function deleteCourse(id) {
-    let course = await Course.findByPk(id);
+async function deleteCourse(ID) {
+    let course = await Course.findByPk(ID);
     return await course.destroy();
 }
 

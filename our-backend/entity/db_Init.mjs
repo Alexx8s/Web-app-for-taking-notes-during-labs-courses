@@ -15,7 +15,7 @@ export async function Create_DB() {
     try {
         const connection = await mysql.createConnection({
             user: "root",
-            password: "1234",
+            password: "",
         });
 
         conn = connection;
@@ -35,9 +35,9 @@ export async function Create_DB() {
 }
 
 function FK_Config() {
-    Student.hasMany(Course);
     Course.belongsTo(Student);
-
+    Student.hasMany(Course);
+    
     Student.hasMany(Note);
     Note.belongsTo(Student);
 
@@ -67,15 +67,36 @@ function DB_Init() {
 //     // Initialize the database
 //     await Create_DB();
 
+//     try {
+//         // Loop through student IDs from 1 to 8
+//         for (let studentID = 1; studentID <= 8; studentID++) {
+//             // Create a student for each ID
+//             const student = await Student.create({
+//                 StudentID: studentID,
+//                 Email: `student${studentID}@example.com`,
+//                 Password: 'dummyPassword',
+//                 FirstName: `FirstName${studentID}`,
+//                 LastName: `LastName${studentID}`,
+//             });
+
+//             console.log(`Student added with ID ${studentID}`);
+//         }
+
+//         console.log('Dummy students added to the database.');
+//     } catch (error) {
+//         console.error('Error adding dummy students to the database:', error);
+//     }
+
+
 //     // Add some sample data
 //     try {
 //         // Loop through student IDs from 1 to 8
 //         for (let studentID = 1; studentID <= 8; studentID++) {
 //             // Create a course for each student
-//             // const course = await Course.create({
-//             //     CourseName: `CSE 316 - Course for Student ${studentID}`,
-//             //     StudentID: studentID,
-//             // });
+//             const course = await Course.create({
+//                 CourseName: `CSE 316 - Course for Student ${studentID}`,
+//                 StudentID: studentID,
+//             });
 
 //             console.log(`Course added for StudentID ${studentID}`);
 //         }
@@ -87,8 +108,8 @@ function DB_Init() {
 // }
 
 
-// Uncomment the line below when you want to seed the database
-// seedDatabase();
+//Uncomment the line below when you want to seed the database
+//seedDatabase();
 
-// export { FK_Config, DB_Init, seedDatabase };
+//export  { FK_Config, DB_Init, seedDatabase };
 export default DB_Init;

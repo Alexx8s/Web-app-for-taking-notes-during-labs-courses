@@ -5,7 +5,7 @@ import {
     createCourse as createCourseFunction,
     deleteCourse as deleteCourseFunction,
     getCoursesByStudent as getCoursesByStudentFunction
-} from "../Dataaccess/CourseDA.mjs";
+} from "../dataAccess/CourseDA.mjs";
 
 let courseRouter = express.Router();
 

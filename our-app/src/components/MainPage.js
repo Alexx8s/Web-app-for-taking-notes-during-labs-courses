@@ -1,11 +1,15 @@
 // MainPage.js
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import '../components-styles/MainPage.css';
 import NavBar from './NavBar.js';
 import Notebook from './Notebook.js';
 import AddNewNotebook from './AddNewNotebook.js';
+import axios from 'axios';
 
-const MainPage = ({studentID}) => {
+
+
+
+const MainPage = ({StudentID}) => {
   const [selectedNotebook, setSelectedNotebook] = useState(null);
   const [isNotebookVisible, setIsNotebookVisible] = useState(false);
   const [isAddNewVisible, setIsAddNewVisible] = useState(false);
@@ -38,6 +42,8 @@ const MainPage = ({studentID}) => {
   const handleShare = () => {
     console.log('Share');
     // Implement logic for sharing
+
+    
   };
 
   const handleNotebookClick = (notebook) => {
@@ -52,6 +58,25 @@ const MainPage = ({studentID}) => {
   const handleCloseAddNew = () => {
     setIsAddNewVisible(false);
   };
+
+  const getNotesByUserId = async (StudentID) => {
+    try {
+      const response = await axios.get(`http://localhost:8003/api/note/${StudentID}`);
+      console.log('Notes:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error during getting notes:', error);
+      throw error;
+    }
+  }
+
+
+  useEffect(() => {
+    if(StudentID){
+      getNotesByUserId(StudentID);
+    }
+  }
+  , [StudentID]);
 
   return (
     <div className="main-page">
@@ -84,7 +109,8 @@ const MainPage = ({studentID}) => {
 
       {isAddNewVisible && (
         <AddNewNotebook onClose={handleCloseAddNew} 
-        studentId = {studentID}/>
+        onNotebookAdded={AddNewNotebook}
+        studentId = {StudentID}/>
       )}
 
       <div className="filters">

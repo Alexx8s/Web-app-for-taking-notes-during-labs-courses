@@ -2,30 +2,73 @@ import React, { useState, useEffect } from 'react';
 import '../components-styles/AddNewNotebook.css';
 import axios from 'axios';
 
-const AddNewNotebook = ({ onClose, studentId }) => {
+function AddNewNotebook ({ onClose,onNotebookAdded, studentId })  {
   const [courses, setCourses] = useState([]);
+  const [isFormVisible, setFormVisible] = useState(false);
   const [notebookData, setNotebookData] = useState({
-    title: '',
-    content: '',
-    selectedCourse: '',
+    CourseID: '',
+    CourseName: '',
+    StudentID: '',
   });
+
+ 
 
   useEffect(() => {
     // Fetch courses when the component mounts
-    fetchCourses();
-  }, []);
+    if(studentId){
+    const fetchCourses = () => {
+      axios
+        .get(`http://localhost:8003/api/courses/${studentId}`)
+        .then((response) => {
+          setCourses(response.data);
+          console.log('Courses:', response.data);
+        })
+        .catch((error) => {
+          console.error('Error fetching courses:', error);
+        });
+    };
+    
+  fetchCourses();
+    }
+    
+  }, [studentId]);
 
-  const fetchCourses = () => {
-    axios
-      .get(`http://localhost:8003/api/courses/${studentId}`)
+
+
+  const toggleFormVisibility = () => {
+    setFormVisible(!isFormVisible);
+  };
+
+  const handleSaveNotebook = () => {
+    console.log('Note Data:', notebookData);
+    axios.post('http://localhost:8003/api/note', notebookData, {
+      headers: { 'Content-Type': 'application/json' },
+    })
       .then((response) => {
-        setCourses(response.data);
-        console.log('Courses:', response.data);
+        console.log("Note created successfully:", response.data);
+        onNotebookAdded(response.data.obj);
+        setNotebookData({
+          CourseID: '',
+          CourseName: '',
+          StudentID: '',
+        });
+        toggleFormVisibility();
       })
       .catch((error) => {
-        console.error('Error fetching courses:', error);
+        console.error("Error creating note:", error);
       });
   };
+
+
+
+const handleCourseChange = (e) => {
+    setNotebookData({
+      ...notebookData,
+      CourseID: e.target.value,
+    });
+  };     
+
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -50,8 +93,8 @@ const AddNewNotebook = ({ onClose, studentId }) => {
         <label>Title:</label>
         <input
           type="text"
-          name="title"
-          value={notebookData.title}
+          name="CourseName"  // Update the name to match the property name in notebookData
+          value={notebookData.CourseName}  // Update the value to use the correct property
           onChange={handleInputChange}
         />
 
@@ -61,22 +104,26 @@ const AddNewNotebook = ({ onClose, studentId }) => {
           value={notebookData.content}
           onChange={handleInputChange}
         />
+        <label htmlFor="subjectSelect">Select Course:</label>
+          <select
+            id="selectedCourse"
+            className="form-select"
+            aria-label="Default select example"
+            value={notebookData.selectedCourse}
+            onChange={handleCourseChange}
+            name="CourseID"
+          >
+            <option value="">Select Course</option>
 
-        <label>Course:</label>
-        <select
-          name="selectedCourse"
-          value={notebookData.selectedCourse}
-          onChange={handleInputChange}
-        >
-          <option value="">Select a Course</option>
-          {courses.map((course) => (
-            <option key={course.CourseID} value={course.CourseID}>
-              {course.CourseName}
-            </option>
-          ))}
-        </select>
+            {courses.map((course) => (
+              <option key={course.CourseID} value={course.CourseID}>
+                {course.CourseName}
+              </option>
+            ))}
+          </select>
+  
 
-        <button type="button" onClick={handleSubmit}>
+        <button type="button" onClick={handleSaveNotebook}>
           Add Notebook
         </button>
         <button type="button" onClick={onClose}>
