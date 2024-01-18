@@ -39,11 +39,14 @@ const AuthSignUp = ({ onSignUp, onSignUpSuccess }) => {
         });
     }
   };
+  const handleLogout = () => {
+    setShowMainPage(false);
+  };
 
   return (
     <div>
       {showMainPage ? (
-        <MainPage studentID={studentId} />
+        <MainPage studentID={studentId} onLogout={handleLogout} />
       ) : (
         <div className="auth-container">
           <h2>Welcome! Create an account here:</h2>

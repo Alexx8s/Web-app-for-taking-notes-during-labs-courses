@@ -6,7 +6,7 @@ import Notebook from './Notebook.js';
 import AddNewNotebook from './AddNewNotebook.js';
 import axios from 'axios';
 
-const MainPage = ({ studentID }) => {
+const MainPage = ({ studentID, onLogout }) => {
   const [selectedNotebook, setSelectedNotebook] = useState(null);
   const [isNotebookVisible, setIsNotebookVisible] = useState(false);
   const [isAddNewVisible, setIsAddNewVisible] = useState(false);
@@ -20,9 +20,7 @@ const MainPage = ({ studentID }) => {
   };
 
   const handleLogout = () => {
-    console.log('Logout');
-    // Implement logic for logging out
-    // For example, you can reset the authentication status
+    onLogout();
   };
 
   const handleShare = () => {

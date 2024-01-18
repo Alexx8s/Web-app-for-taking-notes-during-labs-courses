@@ -15,7 +15,7 @@ export async function Create_DB() {
     try {
         const connection = await mysql.createConnection({
             user: "root",
-            password: "",
+            password: "1234",
         });
 
         conn = connection;

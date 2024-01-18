@@ -15,6 +15,14 @@ function AuthComponent({ onSignIn }) {
     setShowMainPage(true);
   };
 
+  const handleLogout = () => {
+    // Reset state variables to show the sign-in form
+    setEmail('');
+    setPassword('');
+    setShowSignUp(false);
+    setShowMainPage(false);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -37,13 +45,18 @@ function AuthComponent({ onSignIn }) {
     setShowSignUp(true);
   };
 
-  if(showSignUp) {
+  if (showSignUp) {
     return <AuthSignUp onSignUpSuccess={handleSignUpSuccess} />;
   }
+
+  if (showMainPage) {
+    return <MainPage onLogout={handleLogout} />;
+  }
+
   return (
     <div className="auth-container">
       <form className="auth-form" onSubmit={handleSubmit}>
-        <h1>Welcome to APPNAME!</h1>
+        <h1>Welcome to Mareunealta Secreta!</h1>
         <div className="input-group">
           <label>Email:</label>
           <input
@@ -70,9 +83,6 @@ function AuthComponent({ onSignIn }) {
           </div>
         </div>
       </form>
-
-      {/* {showSignUp && <AuthSignUp onSignUpSuccess={handleSignUpSuccess} />}
-      {showMainPage && <MainPage />} */}
     </div>
   );
 }

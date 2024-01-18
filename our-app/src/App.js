@@ -26,12 +26,19 @@ function App() {
       throw error;
     }
   };
+  const handleLogout = () => {
+    // Reset state variables to show the sign-in page
+    setShowSignIn(true);
+    setShowMainPage(false);
+    setStudentId('');
+  };
 
   return (
     <div className="App">
       <header className="App-header">
         {showSignIn && <AuthComponent onSignIn={handleSignIn} />}
-        {showMainPage && <MainPage studentID={studentID} />}
+        {showMainPage && <MainPage studentID={studentID} onLogout={handleLogout}/>}
+
       </header>
     </div>
   );
