@@ -2,38 +2,26 @@ import React, { useState, useEffect } from 'react';
 import '../components-styles/AddNewNotebook.css';
 import axios from 'axios';
 
-function AddNewNotebook ({ onClose,onNotebookAdded, studentId })  {
+function AddNewNotebook({ onClose, onNotebookAdded, studentId }) {
   const [courses, setCourses] = useState([]);
   const [isFormVisible, setFormVisible] = useState(false);
   const [notebookData, setNotebookData] = useState({
+    Title: '',
+    Content: '',
     CourseID: '',
-    CourseName: '',
-    StudentID: '',
   });
 
- 
+  const hardcodedCourses = [
+    { CourseID: 1, CourseName: 'Math' },
+    { CourseID: 2, CourseName: 'Science' },
+    { CourseID: 3, CourseName: 'History' },
+    { CourseID: 4, CourseName: 'English' },
+    { CourseID: 5, CourseName: 'Computer Science' },
+  ];
 
   useEffect(() => {
-    // Fetch courses when the component mounts
-    if(studentId){
-    const fetchCourses = () => {
-      axios
-        .get(`http://localhost:8003/api/courses/${studentId}`)
-        .then((response) => {
-          setCourses(response.data);
-          console.log('Courses:', response.data);
-        })
-        .catch((error) => {
-          console.error('Error fetching courses:', error);
-        });
-    };
-    
-  fetchCourses();
-    }
-    
-  }, [studentId]);
-
-
+    setCourses(hardcodedCourses);
+  }, []);
 
   const toggleFormVisibility = () => {
     setFormVisible(!isFormVisible);
@@ -41,34 +29,31 @@ function AddNewNotebook ({ onClose,onNotebookAdded, studentId })  {
 
   const handleSaveNotebook = () => {
     console.log('Note Data:', notebookData);
-    axios.post('http://localhost:8003/api/note', notebookData, {
-      headers: { 'Content-Type': 'application/json' },
-    })
+    axios
+      .post('http://localhost:8003/api/note', notebookData, {
+        headers: { 'Content-Type': 'application/json' },
+      })
       .then((response) => {
-        console.log("Note created successfully:", response.data);
+        console.log('Note created successfully:', response.data);
         onNotebookAdded(response.data.obj);
         setNotebookData({
+          Title: '',
+          Content: '',
           CourseID: '',
-          CourseName: '',
-          StudentID: '',
         });
         toggleFormVisibility();
       })
       .catch((error) => {
-        console.error("Error creating note:", error);
+        console.error('Error creating note:', error);
       });
   };
 
-
-
-const handleCourseChange = (e) => {
+  const handleCourseChange = (e) => {
     setNotebookData({
       ...notebookData,
       CourseID: e.target.value,
     });
-  };     
-
-
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -78,12 +63,25 @@ const handleCourseChange = (e) => {
     }));
   };
 
-  const handleSubmit = () => {
-    console.log('Add New Notebook Logic');
-    // Implement logic for adding a new notebook
-    // You can use notebookData to capture the notebook details, including the selectedCourse
-    // After adding the notebook, close the component using onClose
-    onClose();
+  const renderCoursesDropdown = () => {
+    return (
+      <select
+        id="selectedCourse"
+        className="form-select"
+        aria-label="Default select example"
+        value={notebookData.CourseID}
+        onChange={handleCourseChange}
+        name="CourseID"
+      >
+        <option value="">Select Course</option>
+
+        {courses.map((course) => (
+          <option key={course.CourseID} value={course.CourseID}>
+            {course.CourseName}
+          </option>
+        ))}
+      </select>
+    );
   };
 
   return (
@@ -93,35 +91,20 @@ const handleCourseChange = (e) => {
         <label>Title:</label>
         <input
           type="text"
-          name="CourseName"  // Update the name to match the property name in notebookData
-          value={notebookData.CourseName}  // Update the value to use the correct property
+          name="Title"
+          value={notebookData.Title}
           onChange={handleInputChange}
         />
 
         <label>Content:</label>
         <textarea
-          name="content"
-          value={notebookData.content}
+          name="Content"
+          value={notebookData.Content}
           onChange={handleInputChange}
         />
-        <label htmlFor="subjectSelect">Select Course:</label>
-          <select
-            id="selectedCourse"
-            className="form-select"
-            aria-label="Default select example"
-            value={notebookData.selectedCourse}
-            onChange={handleCourseChange}
-            name="CourseID"
-          >
-            <option value="">Select Course</option>
 
-            {courses.map((course) => (
-              <option key={course.CourseID} value={course.CourseID}>
-                {course.CourseName}
-              </option>
-            ))}
-          </select>
-  
+        <label htmlFor="selectedCourse">Select Course:</label>
+        {renderCoursesDropdown()}
 
         <button type="button" onClick={handleSaveNotebook}>
           Add Notebook
@@ -132,6 +115,6 @@ const handleCourseChange = (e) => {
       </form>
     </div>
   );
-};
+}
 
 export default AddNewNotebook;

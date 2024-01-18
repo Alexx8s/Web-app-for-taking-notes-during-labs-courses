@@ -43,7 +43,7 @@ const AuthSignUp = ({ onSignUp, onSignUpSuccess }) => {
   return (
     <div>
       {showMainPage ? (
-        <MainPage studentId={studentId} />
+        <MainPage studentID={studentId} />
       ) : (
         <div className="auth-container">
           <h2>Welcome! Create an account here:</h2>

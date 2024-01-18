@@ -7,7 +7,7 @@ const NavBar = ({ onAddNotebook, onLogout, onShare }) => {
     <div className="navbar">
       <button onClick={onAddNotebook}>Add New Notebook</button>
       <button onClick={onLogout}>Logout</button>
-      <button onClick={onShare}>Share</button>
+    
     </div>
   );
 };

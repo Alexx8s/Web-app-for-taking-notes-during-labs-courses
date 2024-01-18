@@ -15,7 +15,7 @@ export async function Create_DB() {
     try {
         const connection = await mysql.createConnection({
             user: "root",
-            password: "",
+            password: "1234",
         });
 
         conn = connection;
@@ -63,53 +63,58 @@ function DB_Init() {
     });
 }
 
-// async function seedDatabase() {
-//     // Initialize the database
-//     await Create_DB();
+async function seedDatabase() {
+    // Initialize the database
+    await Create_DB();
 
-//     try {
-//         // Loop through student IDs from 1 to 8
-//         for (let studentID = 1; studentID <= 8; studentID++) {
-//             // Create a student for each ID
-//             const student = await Student.create({
-//                 StudentID: studentID,
-//                 Email: `student${studentID}@example.com`,
-//                 Password: 'dummyPassword',
-//                 FirstName: `FirstName${studentID}`,
-//                 LastName: `LastName${studentID}`,
-//             });
+    try {
+        // Seed students
+        for (let studentID = 1; studentID <= 8; studentID++) {
+            const student = await Student.create({
+                StudentID: studentID,
+                Email: `student${studentID}@stud.ase.ro`,
+                Password: '1234',
+                FirstName: `FirstName${studentID}`,
+                LastName: `LastName${studentID}`,
+            });
 
-//             console.log(`Student added with ID ${studentID}`);
-//         }
+            console.log(`Student added with ID ${studentID}`);
 
-//         console.log('Dummy students added to the database.');
-//     } catch (error) {
-//         console.error('Error adding dummy students to the database:', error);
-//     }
+            // Seed courses for each student
+            const course = await Course.create({
+                CourseName: `CSE 316 - Course for Student ${studentID}`,
+                StudentID: studentID,
+            });
 
+            console.log(`Course added for StudentID ${studentID}`);
+        }
 
-//     // Add some sample data
-//     try {
-//         // Loop through student IDs from 1 to 8
-//         for (let studentID = 1; studentID <= 8; studentID++) {
-//             // Create a course for each student
-//             const course = await Course.create({
-//                 CourseName: `CSE 316 - Course for Student ${studentID}`,
-//                 StudentID: studentID,
-//             });
+        console.log('Dummy students and courses added to the database.');
+    } catch (error) {
+        console.error('Error seeding the database:', error);
+    }
 
-//             console.log(`Course added for StudentID ${studentID}`);
-//         }
+    // Add some sample data
+    try {
+        // Loop through student IDs from 1 to 8
+        for (let studentID = 1; studentID <= 8; studentID++) {
+            // Create a course for each student
+            const course = await Course.create({
+                CourseName: `CSE 316 - Course for Student ${studentID}`,
+                StudentID: studentID,
+            });
 
-//         console.log('Sample data added to the database.');
-//     } catch (error) {
-//         console.error('Error seeding the database:', error);
-//     }
-// }
+            console.log(`Course added for StudentID ${studentID}`);
+        }
 
+        console.log('Sample data added to the database.');
+    } catch (error) {
+        console.error('Error seeding the database:', error);
+    }
+}
 
-//Uncomment the line below when you want to seed the database
-//seedDatabase();
+// Uncomment the line below when you want to seed the database
+seedDatabase();
 
-//export  { FK_Config, DB_Init, seedDatabase };
+export  { FK_Config, DB_Init, seedDatabase };
 export default DB_Init;
