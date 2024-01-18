@@ -46,18 +46,14 @@ function AddNewNotebook({ onClose, onNotebookAdded, onNotebookEdited, studentId,
   const handleSaveNotebook = async () => {
     try {
       if (initialNotebook) {
-        // If initialNotebook exists, it means we are editing, so make a PUT request
         await axios.put(`http://localhost:8003/api/note/${initialNotebook.NoteID}`, notebookData, {
           headers: { 'Content-Type': 'application/json' },
         });
-        // Call the onNotebookEdited function with the edited notebook
         onNotebookEdited();
       } else {
-        // If initialNotebook is not provided, it means we are creating, so make a POST request
         const response = await axios.post('http://localhost:8003/api/note', notebookData, {
           headers: { 'Content-Type': 'application/json' },
         });
-        // Call the onNotebookAdded function with the newly created notebook
         onNotebookAdded(response.data.obj);
       }
 

@@ -1,4 +1,4 @@
-// MainPage.js
+
 import React, { useState, useEffect } from 'react';
 import '../components-styles/MainPage.css';
 import NavBar from './NavBar.js';
@@ -25,7 +25,7 @@ const MainPage = ({ studentID, onLogout }) => {
 
   const handleShare = () => {
     console.log('Share');
-    // Implement logic for sharing
+    
   };
 
   const handleNotebookClick = (notebook) => {
@@ -42,17 +42,15 @@ const MainPage = ({ studentID, onLogout }) => {
   };
 
   const handleNotebookDeleted = () => {
-    // Fetch the updated list of notes after deletion
+
     getNotesByUserId(studentID);
   };
 
   const handleNotebookAdded = (newNotebook) => {
-    // Update the notebooks state with the new notebook
     setNotebooks((prevNotebooks) => [...prevNotebooks, newNotebook]);
   };
 
   const handleNotebookEdited = () => {
-    // Fetch the updated list of notes after editing
     getNotesByUserId(studentID);
   };
 

@@ -1,4 +1,3 @@
-// Notebook.js
 import React, { useState } from 'react';
 import '../components-styles/Notebook.css';
 import axios from 'axios';

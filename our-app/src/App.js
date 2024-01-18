@@ -1,4 +1,3 @@
-// App.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import AuthComponent from './components/AuthComponent';
@@ -27,7 +26,6 @@ function App() {
     }
   };
   const handleLogout = () => {
-    // Reset state variables to show the sign-in page
     setShowSignIn(true);
     setShowMainPage(false);
     setStudentId('');
